@@ -1,0 +1,43 @@
+version: '3.8' 
+services:
+  web1:
+    image: lxin0704/web1:latest
+    ports:
+      - "8080:80"
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.2
+
+  web2:
+    image: lxin0704/web2:latest
+    ports:
+      - "8081:80"
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.3
+
+  firewall:
+    image: lxin0704/firewall:latest
+    cap_add:
+      - NET_ADMIN
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.4
+
+  parrot:
+    image: lxin0704/parrotsec:latest
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+    stdin_open: true
+    tty: true
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.5
+
+networks:
+  mynetwork:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
